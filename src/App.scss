@@ -25,8 +25,8 @@ input {
   margin-right: 10px;
 }
 
-.aspect-icon,
-.aspect-icon-active {
+.aspect-icon-unlocked,
+.aspect-icon-locked {
   width: 1.5em;
   height: 1.5em;
   &:hover {
@@ -34,21 +34,20 @@ input {
   }
 }
 
-.aspect-icon {
+.aspect-icon-unlocked {
   fill: grey;
   color: grey;
 }
 
+.aspect-icon-locked {
+  fill: darkred;
+  color: darkred;
+}
 .aspect-icon-baseline {
   top: 0.45em;
   position: relative;
   display: inline-flex;
   align-self: center;
-}
-
-.aspect-icon-active {
-  fill: darkred;
-  color: darkred;
 }
 
 .brrr {
