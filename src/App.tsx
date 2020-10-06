@@ -25,7 +25,9 @@ const App = () => {
     setShouldBrrr(true);
     setIsValid(false);
 
-    setCatUrl(`${BASE_URL}/${dims.width}/${dims.height}`);
+    const newCatUrl = `${BASE_URL}/${dims.width}/${dims.height}`;
+
+    if (catUrl !== newCatUrl) setCatUrl(newCatUrl);
 
     setTimeout(() => setShouldBrrr(false), 1500);
     setTimeout(() => setIsValid(true), 1500);
@@ -70,7 +72,7 @@ const App = () => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     e.preventDefault();
 
-    const { name, value }: { name: 'height' | 'width'; value: number } = e.target as any;
+    const { name, value }: { name: 'width' | 'height'; value: number } = e.target as any;
 
     if (value === dims[name]) return;
 
@@ -108,7 +110,7 @@ const App = () => {
   return (
     <div className='App'>
       <header>
-        <h1>Welcome to Kitty Go Brrr</h1>
+        <h1>Welcome To Kitty Go Brrr</h1>
         <p>
           This app will make a kitty of a set size go <i>brrr.</i>
         </p>
