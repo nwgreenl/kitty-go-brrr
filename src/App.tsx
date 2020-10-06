@@ -2,9 +2,9 @@ import React, { useState, MouseEvent, ChangeEvent } from 'react';
 
 import {
   BASE_URL,
-  DEFAULT_DIMS,
   DEFAULT_URL,
-  DEFAULT_ASPECT_STATE,
+  DEFAULT_STATE_DIMS,
+  DEFAULT_STATE_ASPECT,
   INPUT_MIN,
   INPUT_MAX,
 } from './settings';
@@ -16,8 +16,8 @@ const App = () => {
   const [shouldBrrr, setShouldBrrr] = useState(false);
   const [isValid, setIsValid] = useState(true);
   const [catUrl, setCatUrl] = useState(DEFAULT_URL);
-  const [dims, setDims] = useState(DEFAULT_DIMS);
-  const [aspectInfo, setAspectInfo] = useState(DEFAULT_ASPECT_STATE);
+  const [dims, setDims] = useState(DEFAULT_STATE_DIMS);
+  const [aspectInfo, setAspectInfo] = useState(DEFAULT_STATE_ASPECT);
 
   const handleSubmit = (e: MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
