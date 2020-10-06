@@ -63,6 +63,7 @@ const App = () => {
       setIsValid(false);
     } else {
       errorElem!.className = '';
+      setIsValid(true);
     }
   };
 
