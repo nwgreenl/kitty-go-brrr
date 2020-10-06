@@ -5,8 +5,7 @@ import {
   DEFAULT_URL,
   DEFAULT_STATE_DIMS,
   DEFAULT_STATE_ASPECT,
-  INPUT_MIN,
-  INPUT_MAX,
+  INPUT_RESTRICTIONS,
 } from './settings';
 import round from './utils/round';
 import AspectIcon from './icons/AspectIcon';
@@ -45,9 +44,9 @@ const App = () => {
   // edge case where aspect ratio is locked and input puts other over max
   const handleError = (input: string, output: string) => {
     alert(
-      `ERROR: Desired input value of '${input}' (with locked aspect ratio) will put '${output}' over the max value of ${INPUT_MAX}.`
+      `ERROR: Desired input value of '${input}' (with locked aspect ratio) will put '${output}' over the max value of ${INPUT_RESTRICTIONS.MAX}.`
     );
-    document.getElementById(`${input}-input`)!.style.border = '2px solid darkred';
+    document.getElementById(`${input}-input`)!.className = 'error';
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -57,11 +56,11 @@ const App = () => {
 
     if (value === dims[name]) return;
 
-    setIsValid(value >= INPUT_MIN && value <= INPUT_MAX);
+    setIsValid(value >= INPUT_RESTRICTIONS.MIN && value <= INPUT_RESTRICTIONS.MAX);
 
-    value >= INPUT_MIN && value <= INPUT_MAX
-      ? (e.target.style.border = '')
-      : (e.target.style.border = '2px solid darkred');
+    value >= INPUT_RESTRICTIONS.MIN && value <= INPUT_RESTRICTIONS.MAX
+      ? (e.target.className = '')
+      : (e.target.className = 'error');
 
     let newDims = { ...dims };
 
@@ -69,7 +68,7 @@ const App = () => {
       switch (name) {
         case 'width':
           let height = round(value / aspectInfo.ratio);
-          height <= INPUT_MAX
+          height <= INPUT_RESTRICTIONS.MAX
             ? (newDims = {
                 width: round(value),
                 height,
@@ -78,7 +77,7 @@ const App = () => {
           break;
         case 'height':
           let width = round(value * aspectInfo.ratio);
-          width <= INPUT_MAX
+          width <= INPUT_RESTRICTIONS.MAX
             ? (newDims = {
                 width,
                 height: round(value),
@@ -101,7 +100,11 @@ const App = () => {
       <header>
         <h1>Welcome to Kitty Go Brrr</h1>
         <p>
-          This app will make a kitty of a set size go <i>brrr.</i>
+          This app will make a kitty of a set size{' '}
+          <i>
+            (between {INPUT_RESTRICTIONS.MIN} & {INPUT_RESTRICTIONS.MAX}px)
+          </i>{' '}
+          go <i>brrr.</i>
         </p>
       </header>
       <img src={catUrl} alt='cat' className={shouldBrrr ? 'cat-go-brrr' : 'cat-stay'} />
@@ -114,8 +117,8 @@ const App = () => {
           name='width'
           id='width-input'
           type='number'
-          min={INPUT_MIN}
-          max={INPUT_MAX}
+          min={INPUT_RESTRICTIONS.MIN}
+          max={INPUT_RESTRICTIONS.MAX}
           value={dims.width}
           onChange={handleChange}
         />
@@ -125,8 +128,8 @@ const App = () => {
           name='height'
           id='height-input'
           type='number'
-          min={INPUT_MIN}
-          max={INPUT_MAX}
+          min={INPUT_RESTRICTIONS.MIN}
+          max={INPUT_RESTRICTIONS.MAX}
           value={dims.height}
           onChange={handleChange}
         />
@@ -143,7 +146,8 @@ const App = () => {
       <footer>
         <hr />
         <i>
-          Changing the size before making it go brrr <u>usually</u> results in a random kitty.
+          Changing the height or width before making kitty go brrr <u>usually</u> results in a
+          transforming kitty.
           <br />
           <br />
           Brrr powered by <a href={BASE_URL}>placekitten.</a>
