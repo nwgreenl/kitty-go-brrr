@@ -163,7 +163,8 @@ const App = () => {
           transforming kitty.
           <br />
           <br />
-          Brrr powered by <a href={BASE_URL}>placekitten.</a>
+          Source on <a href='https://github.com/nwgreenl/kitty-go-brrr'>github</a> | Powered by{' '}
+          <a href={BASE_URL}>placekitten</a>
         </i>
       </footer>
     </div>
