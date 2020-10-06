@@ -1,4 +1,4 @@
-import React, { useState, MouseEvent, ChangeEvent } from 'react';
+import React, { useState, MouseEvent, ChangeEvent, FocusEvent } from 'react';
 
 import {
   BASE_URL,
@@ -41,12 +41,29 @@ const App = () => {
     }));
   };
 
-  // edge case where aspect ratio is locked and input puts other over max
-  const handleError = (input: string, output: string) => {
-    alert(
-      `ERROR: Desired input value of '${input}' (with locked aspect ratio) will put '${output}' over the max value of ${INPUT_RESTRICTIONS.MAX}.`
-    );
-    document.getElementById(`${input}-input`)!.className = 'error';
+  const handleFocusOut = (): void => {
+    let dim: keyof typeof dims;
+
+    let err = false;
+
+    for (dim in dims) {
+      let dimElem = document.getElementById(`${dim}-input`);
+      if (dims[dim] >= INPUT_RESTRICTIONS.MIN && dims[dim] <= INPUT_RESTRICTIONS.MAX) {
+        dimElem!.className = '';
+      } else {
+        dimElem!.className = 'error';
+        err = true;
+      }
+    }
+
+    let errorElem = document.getElementById('error-msg');
+
+    if (err) {
+      errorElem!.className = 'error-msg-active';
+      setIsValid(false);
+    } else {
+      errorElem!.className = '';
+    }
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -56,33 +73,25 @@ const App = () => {
 
     if (value === dims[name]) return;
 
-    setIsValid(value >= INPUT_RESTRICTIONS.MIN && value <= INPUT_RESTRICTIONS.MAX);
-
-    value >= INPUT_RESTRICTIONS.MIN && value <= INPUT_RESTRICTIONS.MAX
-      ? (e.target.className = '')
-      : (e.target.className = 'error');
-
     let newDims = { ...dims };
 
     if (aspectInfo.isLocked) {
       switch (name) {
         case 'width':
           let height = round(value / aspectInfo.ratio);
-          height <= INPUT_RESTRICTIONS.MAX
-            ? (newDims = {
-                width: round(value),
-                height,
-              })
-            : handleError(name, 'height');
+          newDims = {
+            width: round(value),
+            height,
+          };
           break;
         case 'height':
           let width = round(value * aspectInfo.ratio);
-          width <= INPUT_RESTRICTIONS.MAX
-            ? (newDims = {
-                width,
-                height: round(value),
-              })
-            : handleError(name, 'width');
+          newDims = {
+            width,
+            height: round(value),
+          };
+          break;
+        default:
           break;
       }
     } else {
@@ -100,13 +109,10 @@ const App = () => {
       <header>
         <h1>Welcome to Kitty Go Brrr</h1>
         <p>
-          This app will make a kitty of a set size{' '}
-          <i>
-            (between {INPUT_RESTRICTIONS.MIN} & {INPUT_RESTRICTIONS.MAX}px)
-          </i>{' '}
-          go <i>brrr.</i>
+          This app will make a kitty of a set size go <i>brrr.</i>
         </p>
       </header>
+
       <img src={catUrl} alt='cat' className={shouldBrrr ? 'cat-go-brrr' : 'cat-stay'} />
 
       <br />
@@ -121,6 +127,7 @@ const App = () => {
           max={INPUT_RESTRICTIONS.MAX}
           value={dims.width}
           onChange={handleChange}
+          onBlur={handleFocusOut}
         />
 
         <label htmlFor='height'>Height:</label>
@@ -132,11 +139,16 @@ const App = () => {
           max={INPUT_RESTRICTIONS.MAX}
           value={dims.height}
           onChange={handleChange}
+          onBlur={handleFocusOut}
         />
 
         <AspectIcon isAspectLocked={aspectInfo.isLocked} handleClick={handleClick} />
 
         <br />
+
+        <p id='error-msg' className=''>
+          Width and height must be between {INPUT_RESTRICTIONS.MIN} & {INPUT_RESTRICTIONS.MAX}px
+        </p>
 
         <button className='brrr' type='submit' onClick={handleSubmit} disabled={!isValid}>
           Go Brrr

@@ -6,6 +6,10 @@
     color: lightskyblue;
     text-decoration: none;
   }
+
+  img {
+    margin: 10px 0 15px 0;
+  }
 }
 
 footer {
@@ -45,8 +49,8 @@ input.error {
 }
 
 .aspect-icon-locked {
-  fill: darkred;
-  color: darkred;
+  fill: skyblue;
+  color: skyblue;
 }
 .aspect-icon-baseline {
   top: 0.45em;
@@ -55,12 +59,25 @@ input.error {
   align-self: center;
 }
 
+.error-msg-active {
+  display: block;
+  margin-top: 0px;
+  color: darkred;
+  font-style: italic;
+  font-size: small;
+}
+
+#error-msg[class=''] {
+  display: none;
+}
+
 .brrr {
   background-color: lightskyblue;
   border: 1px solid grey;
   cursor: pointer;
   padding: 9px 23px;
   border-radius: 5px;
+  margin-top: 5px;
   &:hover {
     background-color: skyblue;
   }
