@@ -8,22 +8,16 @@ import {
   INPUT_MIN,
   INPUT_MAX,
 } from './settings';
+import round from './utils/round';
 import AspectIcon from './icons/AspectIcon';
 import './App.scss';
-
-// util
-const round = (num: number, precision = 0): number =>
-  !precision ? Math.round(num) : parseFloat(num.toFixed(precision));
 
 const App = () => {
   const [shouldBrrr, setShouldBrrr] = useState(false);
   const [isValid, setIsValid] = useState(true);
   const [catUrl, setCatUrl] = useState(DEFAULT_URL);
   const [dims, setDims] = useState(DEFAULT_DIMS);
-  const [isAspectLocked, setIsAspectLocked] = useState(DEFAULT_ASPECT_STATE);
-  const [aspectRatio, setAspectRatio] = useState(
-    round(DEFAULT_DIMS.width / DEFAULT_DIMS.height, 2)
-  );
+  const [aspectInfo, setAspectInfo] = useState(DEFAULT_ASPECT_STATE);
 
   const handleSubmit = (e: MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
@@ -42,8 +36,10 @@ const App = () => {
     e.preventDefault();
     e.stopPropagation();
 
-    setIsAspectLocked(!isAspectLocked);
-    setAspectRatio(round(dims.width / dims.height, 2));
+    setAspectInfo((prevState) => ({
+      ratio: round(dims.width / dims.height, 2),
+      isLocked: !prevState.isLocked,
+    }));
   };
 
   // edge case where aspect ratio is locked and input puts other over max
@@ -69,10 +65,10 @@ const App = () => {
 
     let newDims = { ...dims };
 
-    if (isAspectLocked) {
+    if (aspectInfo.isLocked) {
       switch (name) {
         case 'width':
-          let height = round(value / aspectRatio);
+          let height = round(value / aspectInfo.ratio);
           height <= INPUT_MAX
             ? (newDims = {
                 width: round(value),
@@ -81,7 +77,7 @@ const App = () => {
             : handleError(name, 'height');
           break;
         case 'height':
-          let width = round(value * aspectRatio);
+          let width = round(value * aspectInfo.ratio);
           width <= INPUT_MAX
             ? (newDims = {
                 width,
@@ -135,7 +131,7 @@ const App = () => {
           onChange={handleChange}
         />
 
-        <AspectIcon isAspectLocked={isAspectLocked} handleClick={handleClick} />
+        <AspectIcon isAspectLocked={aspectInfo.isLocked} handleClick={handleClick} />
 
         <br />
 
