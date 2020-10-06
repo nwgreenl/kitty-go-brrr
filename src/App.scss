@@ -1,0 +1,82 @@
+.App {
+  text-align: center;
+  padding: 25px;
+
+  a {
+    color: rgb(71, 159, 194);
+    text-decoration: none;
+  }
+}
+
+footer {
+  width: 25%;
+  margin: 0 auto;
+  margin-top: 25px;
+}
+
+label {
+  margin-right: 5px;
+}
+
+input {
+  padding: 5px;
+  margin: 10px 0 10px 0;
+  width: 4em;
+  margin-right: 10px;
+}
+
+.aspect-icon,
+.aspect-icon-active {
+  width: 1.5em;
+  height: 1.5em;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.aspect-icon {
+  fill: grey;
+  color: grey;
+}
+
+.aspect-icon-baseline {
+  top: 0.45em;
+  position: relative;
+  display: inline-flex;
+  align-self: center;
+}
+
+.aspect-icon-active {
+  fill: darkred;
+  color: darkred;
+}
+
+.brrr {
+  background-color: lightskyblue;
+  border: 1px solid grey;
+  cursor: pointer;
+  padding: 9px 23px;
+  border-radius: 5px;
+  &:hover {
+    background-color: skyblue;
+  }
+  &:disabled {
+    background-color: skyblue;
+    cursor: default;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .cat-go-brrr {
+    animation: cat-go-brrr 1500ms ease;
+  }
+}
+
+@keyframes cat-go-brrr {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(1800deg);
+  }
+}
